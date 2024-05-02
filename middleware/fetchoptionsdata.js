@@ -1,11 +1,8 @@
-const express = require("express");
 const axios = require("axios");
 
-const app = express();
-const port = 3000;
-
-async function fetchOptionData(symbol) {
+exports.fetchOptionData = async (symbol) => {
   const url = `https://www.nseindia.com/api/option-chain-indices?symbol=${symbol}`;
+  console.log(url);
   try {
     const response = await axios.get(url, {
       headers: {
@@ -33,18 +30,4 @@ async function fetchOptionData(symbol) {
     console.error("Error fetching option data:", error);
     return null;
   }
-}
-
-app.get("/option-data/:symbol", async (req, res) => {
-  const symbol = req.params.symbol;
-  const data = await fetchOptionData(symbol);
-  if (data) {
-    res.json(data);
-  } else {
-    res.status(500).json({ error: "Failed to fetch option data" });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+};
